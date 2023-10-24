@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import ar.com.educacionit.bootcamp.Entity;
 import ar.com.educacionit.bootcamp.db.AdministradorDeConexiones;
-
-public abstract class BaseCrud<T> implements BaseRepository<T> {
+							/*                   */
+public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 
 	private Class<T> type;
 	private String table;
@@ -21,9 +22,25 @@ public abstract class BaseCrud<T> implements BaseRepository<T> {
 	}
 	
 	@Override
-	public void delete(String id) {
+	public void delete(Long id) {
 		//eliminar entidad por id
 		System.out.println("Eliminandio " + type.getName() + "por id="+id);
+		//														 1 2 3 4 5.. N
+		String sql = "DELETE FROM "+ this.table + " WHERE ID = ?";
+		
+		try(Connection connection = AdministradorDeConexiones.getConnection()) {
+			
+			PreparedStatement statement = connection.prepareStatement(sql);
+			//                ?
+			statement.setLong(1, id);
+			
+			int res = statement.executeUpdate();
+			if(res > 0) {
+				System.out.println("Se elimino el id:" + id);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	@Override
@@ -84,8 +101,28 @@ public abstract class BaseCrud<T> implements BaseRepository<T> {
 	
 	@Override
 	public void save(T entidad) {
-		System.out.println("Grabando " + type.getName() + entidad);		
+		System.out.println("Grabando " + type.getName() + entidad);
+		String sql ="INSERT INTO " + this.table + this.getSaveSQL();
+		
+		try(Connection connection = AdministradorDeConexiones.getConnection()) {
+			
+			PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+			saveEntity(entidad, statement);
+			
+			statement.executeUpdate();
+			
+			ResultSet resKey = statement.getGeneratedKeys();
+			if(resKey.next()) {
+				entidad.setId(resKey.getLong(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
 	}
+	
+	protected abstract String getSaveSQL();
+	protected abstract void saveEntity(T entidad,PreparedStatement pst) throws SQLException;
 	
 	@Override
 	public void update(T entidad) {

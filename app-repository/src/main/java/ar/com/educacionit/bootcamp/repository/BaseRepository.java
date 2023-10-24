@@ -5,7 +5,7 @@ import java.util.Collection;
 public interface BaseRepository<T> {
 	public void save(T entidad);
 
-	public void delete(String id);
+	public void delete(Long id);
 
 	public void update(T entidad);
 

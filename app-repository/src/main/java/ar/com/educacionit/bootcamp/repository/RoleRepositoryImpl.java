@@ -1,5 +1,6 @@
 package ar.com.educacionit.bootcamp.repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -29,5 +30,17 @@ public class RoleRepositoryImpl extends BaseCrud<Rol> implements RoleRepository 
 		String role = res.getString(2);
 		
 		return new Rol(id, role);
+	}
+
+	@Override
+	protected String getSaveSQL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void saveEntity(Rol entidad, PreparedStatement pst) throws SQLException {
+		// TODO Auto-generated method stub
+		
 	}
 }

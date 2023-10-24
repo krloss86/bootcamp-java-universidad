@@ -20,8 +20,11 @@ public class UserServiceImpl extends AbstractEntidadBaseService<User> implements
 	@Override
 	public User buscarPoId(Long id) {
 		User user = super.buscarPoId(id);
-		List<Rol> roles = this.roleRepository.findByUserId(id);
-		user.setRoles(roles);
+		if(user != null) {
+			List<Rol> roles = this.roleRepository.findByUserId(id);
+			user.setRoles(roles);
+		}
 		return user;
 	}
+
 }
