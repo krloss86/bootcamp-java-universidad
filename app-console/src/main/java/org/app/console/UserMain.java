@@ -1,14 +1,18 @@
 package org.app.console;
 
+import org.app.service.ServiceLocator;
 import org.app.service.UserService;
-import org.app.service.UserServiceImpl;
+
+import ar.com.educacionit.bootcamp.User;
 
 public class UserMain 
 {
     public static void main( String[] args )
     {
-    	UserService serviceB = new UserServiceImpl();
-    	var todosB = serviceB.buscarTodos();
-    	System.out.println(todosB);
+    	UserService service = (UserService) ServiceLocator.getService(UserService.class);    	
+    	
+    	User user =service.buscarPoId(1L);
+    	
+    	System.out.println(user);
     }
 }

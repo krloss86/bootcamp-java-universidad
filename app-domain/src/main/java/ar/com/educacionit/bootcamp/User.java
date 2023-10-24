@@ -50,10 +50,16 @@ public class User {
 		}
 		this.roles.add(role);
 	}
+	public void setRoles(List<Rol> roles) {
+		if(roles == null) {
+			throw new IllegalArgumentException("Role invalido");
+		}
+		this.roles = roles;
+	}
 	
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", roles=" + roles + "]";
 	}
 	
 }

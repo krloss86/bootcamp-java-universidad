@@ -9,7 +9,7 @@ public interface BaseRepository<T> {
 
 	public void update(T entidad);
 
-	public T getById(String id);
+	public T getById(Long id);
 
 	public Collection<T> findAll();
 }

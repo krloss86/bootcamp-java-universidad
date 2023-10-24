@@ -6,9 +6,9 @@ import java.sql.DriverManager;
 public class AdministradorDeConexiones {
 
 	public static Connection getConnection() {
-		String usernameDb = "root";
-		String passwordDb = "secret";
-		String url = "jdbc:mysql://127.0.0.1/educacionit-bootcamp-vicente-lopez?serverTimeZone=UTC&userSSL=false";//mysql|postgress|oracle
+		String usernameDb = System.getenv("USERNAME");
+		String passwordDb = System.getenv("PASSWORD");
+		String url = "jdbc:mysql://127.0.0.1:33060/educacionit-bootcamp-vicente-lopez?serverTimeZone=UTC&useSSL=false";//mysql|postgress|oracle
 		String driverClassName = "com.mysql.cj.jdbc.Driver";
 		
 		try {
@@ -17,7 +17,7 @@ public class AdministradorDeConexiones {
 			
 			return DriverManager.getConnection(url,usernameDb,passwordDb);
 		}catch (Exception e) {
-			throw new IllegalArgumentException("No se pudo obtener conexion para:" + url + " - " + driverClassName);
+			throw new IllegalArgumentException("No se pudo obtener conexion para:" + url + " - " + driverClassName,e);
 		}
 	}
 }
