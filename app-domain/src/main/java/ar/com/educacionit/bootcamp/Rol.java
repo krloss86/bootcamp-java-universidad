@@ -32,5 +32,9 @@ public class Rol extends Entity{
 	public String toString() {
 		return "Rol [id=" + id + ", role=" + role + "]";
 	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 	
 }

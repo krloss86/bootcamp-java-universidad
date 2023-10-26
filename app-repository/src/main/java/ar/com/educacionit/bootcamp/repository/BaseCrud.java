@@ -124,10 +124,37 @@ public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 	protected abstract String getSaveSQL();
 	protected abstract void saveEntity(T entidad,PreparedStatement pst) throws SQLException;
 	
+	//update es similar al save!!!
+	//ver que campos son actualizables 
 	@Override
 	public void update(T entidad) {
-		System.out.println("Actualizando " + type.getName() + entidad);		
+		String sql = "update " + this.table + " set " + getUpdateSQL() + " where id = ?";
+		
+		try(Connection connection = AdministradorDeConexiones.getConnection()) {
+			
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			setUpdateSQL(entidad, statement);
+			
+			statement.setLong(getLast(sql),(Long)entidad.getId());
+			
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
+	public int getLast(String sql) {
+		int idx = 0;
+		for(char c : sql.toCharArray()) {
+			if(c == '?') {
+				idx ++;
+			}
+		}
+		return idx;
+	}
+
+	protected abstract String getUpdateSQL();
+	protected abstract void setUpdateSQL(T entity, PreparedStatement pst) throws SQLException;
 	
 	public List<T> findBySQL(String sql) {
 		List<T> list = new ArrayList<>();
@@ -147,5 +174,5 @@ public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 		
 		return list;
 	}
-
+	
 }

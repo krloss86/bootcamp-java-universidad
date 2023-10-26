@@ -32,6 +32,15 @@ public class User extends Entity{
 		this.password = password;
 	}
 
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public Long getId() {
 		return id;
 	}

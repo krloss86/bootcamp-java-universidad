@@ -11,19 +11,10 @@ public class UserMain
     {
     	UserService service = (UserService) ServiceLocator.getService(UserService.class);    	
     	
-    	/*User user6 =service.buscarPoId(6L);*/
+    	User newUser = service.buscarPoId(9L);
+    	newUser.setUsername("usuario");
+    	newUser.setPassword("123456");
     	
-    	//service.eliminarPorId(7L);
-    	/*
-    	User user = service.buscarPoId(6L);
-    	
-    	System.out.println(user6);
-    	System.out.println(user);
-    	*/
-    	
-    	User newUser = new User("PEPE", "PEPE1234");
-    	service.guardar(newUser);
-    	
-    	System.out.println(newUser.getId()); //se lo setea la implementacion de CrudBase!
+    	service.actualizar(newUser);
     }
 }

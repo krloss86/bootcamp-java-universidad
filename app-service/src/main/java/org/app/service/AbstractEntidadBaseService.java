@@ -31,4 +31,9 @@ public abstract class AbstractEntidadBaseService<T> implements EntidadBaseServic
 	public void guardar(T entity) {
 		this.repository.save(entity);
 	}
+	
+	@Override
+	public void actualizar(T newUser) {
+		this.repository.update(newUser);
+	}
 }

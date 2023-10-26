@@ -10,7 +10,7 @@ import ar.com.educacionit.bootcamp.Rol;
 public class RoleRepositoryImpl extends BaseCrud<Rol> implements RoleRepository {
 
 	public RoleRepositoryImpl() {
-		super(Rol.class, "roles");
+		super(Rol.class, "ROL");
 	}
 
 	@Override
@@ -43,4 +43,15 @@ public class RoleRepositoryImpl extends BaseCrud<Rol> implements RoleRepository 
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	protected String getUpdateSQL() {		
+		return "role = ?";
+	}
+
+	@Override
+	protected void setUpdateSQL(Rol entity, PreparedStatement pst) throws SQLException {
+		pst.setString(1, entity.getRole());		
+	}
+
 }
