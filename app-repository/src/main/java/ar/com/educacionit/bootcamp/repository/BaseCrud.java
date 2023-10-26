@@ -67,9 +67,8 @@ public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 	
 	@Override
 	public T getById(Long id) {
-		System.out.println("Buscando " + type.getName() + "por id="+id);
 		String sql = "SELECT * FROM "+ this.table + " WHERE ID = " + id;
-		
+		System.out.println(sql);
 		T entity = null;
 		
 		//JDBC: par poder consultar a la tabla via java
@@ -101,9 +100,8 @@ public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 	
 	@Override
 	public void save(T entidad) {
-		System.out.println("Grabando " + type.getName() + entidad);
 		String sql ="INSERT INTO " + this.table + this.getSaveSQL();
-		
+		System.out.println(sql);
 		try(Connection connection = AdministradorDeConexiones.getConnection()) {
 			
 			PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
