@@ -13,12 +13,11 @@ public class MeliCategoriaServiceImpl implements MeliCategoriaService {
 	}
 	
 	public Categoria getCategoria(String categoria) {
-		//return this.executor.get("sites/MLA/categories");
-		return this.executor.get();
+		return this.executor.get("/categories/"+categoria);
 	}
 
 	public List<Categoria> findCategorias() {
-		return executor.find();
+		return executor.find("/sites/MLA/categories");
 	}
 
 	public void creatCategoria(Categoria dto) {

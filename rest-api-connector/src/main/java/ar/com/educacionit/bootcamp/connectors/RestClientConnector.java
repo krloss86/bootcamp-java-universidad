@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.Invocation.Builder;
 import jakarta.ws.rs.client.WebTarget;
@@ -24,20 +25,32 @@ public abstract class RestClientConnector<T> {
 		this.listType = listType;
 	}
 
-	public T get() {
+	public T get(String path) {
 
-		Invocation.Builder invoBuilder = commongLogic();
+		Client client = ClientBuilder.newClient();
+
+		WebTarget target = client.target(url);
 		
-		Response response = invoBuilder.get();
+		if(path != null) {
+			target = target.path(path);
+		}
+
+		Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+		
+		Response response = invocation.get();
+		
+		if (response.getStatus() != Status.OK.getStatusCode()) {
+			throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
+		}
 		
 		T responseDto = this.buildFromResponse(response);
 
 		return responseDto;
 	}
 
-	public List<T> find() {
+	public List<T> find(String path) {
 
-		Invocation.Builder invoBuilder = commongLogic();
+		Invocation.Builder invoBuilder = buildInvocationBuilder(path);
 		
 		Response response = invoBuilder.get(); 
 		
@@ -46,9 +59,9 @@ public abstract class RestClientConnector<T> {
 		return responseDto;
 	}
 	
-	public void create(T dto) {
+	public Object create(Object dto) {
 
-		Invocation.Builder invocation = commongLogic();
+		Invocation.Builder invocation = buildInvocationBuilder(null);
 		
 		Response response = this.buildPost(invocation, dto);
 
@@ -56,18 +69,22 @@ public abstract class RestClientConnector<T> {
 			throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
 		}
 		
-		// T responseDto = this.buildFromResponse(response);
-
-		//return responseDto;
+		return this.buildFromResponse(response);
 	}
 	
-	protected abstract Response buildPost(Builder invocation, T dto);
+	protected Response buildPost(Builder invocation, Object dto) {
+		return invocation.post(Entity.entity(dto,MediaType.APPLICATION_JSON));
+	}
 
-	private Invocation.Builder commongLogic() {
+	protected Invocation.Builder buildInvocationBuilder(String path) {
 		Client client = ClientBuilder.newClient();
 
-		WebTarget target = this.buildWebTarget(client);
-
+		WebTarget target = client.target(url); 
+				
+		if(path != null) {
+			target = target.path(path);
+		}
+	
 		Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
 
 		/*Response response = this.buildResponse(invocation);
@@ -88,9 +105,5 @@ public abstract class RestClientConnector<T> {
 
 	protected List<T> buildListFromResponse(Response response) {
 		return response.readEntity(this.listType);
-	}
-
-	private WebTarget buildWebTarget(Client client) {
-		return client.target(url);
 	}
 }

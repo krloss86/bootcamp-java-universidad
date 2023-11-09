@@ -20,20 +20,24 @@ public class MeliController extends HttpServlet{
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		MeliCategoriaService servieRest = new MeliCategoriaServiceImpl(
-			"https://api.mercadolibre.com"
-		);
+		MeliCategoriaService servieRest = new MeliCategoriaServiceImpl("https://api.mercadolibre.com");
 
-		List<Categoria> categorias = servieRest.findCategorias();
-		Categoria categoria = servieRest.getCategoria("ABC");
-		ObjectMapper mapper = new ObjectMapper();
+		Categoria c = new Categoria();
+		c.setId("12345");
+		c.setName("Name");
 		
-		String jsonList = mapper.writeValueAsString(categorias);
-//		String json = mapper.writeValueAsString(categoria);
+		servieRest.creatCategoria(c);
 		
-		System.out.println(jsonList);
-//		System.out.println(json);
+//		List<Categoria> categorias = servieRest.findCategorias();
+//		Categoria categoria = servieRest.getCategoria("MLA3530");
+//		ObjectMapper mapper = new ObjectMapper();
+//		
+//		String jsonList = mapper.writeValueAsString(categorias);
+////		String json = mapper.writeValueAsString(categoria);
+//		
+//		System.out.println(jsonList);
+////		System.out.println(json);
 		
-		resp.getWriter().print(jsonList);
+//		resp.getWriter().print(jsonList);
 	}
 }
