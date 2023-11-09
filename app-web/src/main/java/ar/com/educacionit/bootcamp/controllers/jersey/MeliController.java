@@ -1,37 +1,39 @@
 package ar.com.educacionit.bootcamp.controllers.jersey;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ar.com.educacionit.bootcamp.connectors.RestClientConnector;
-import ar.com.educacionit.bootcamp.controllers.jersey.meli.dto.Categoria;
+import ar.com.educacionit.bootcamp.connectors.meli.MeliCategoriaService;
+import ar.com.educacionit.bootcamp.connectors.meli.MeliCategoriaServiceImpl;
+import ar.com.educacionit.bootcamp.connectors.meli.dto.Categoria;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@SuppressWarnings({"serial","rawtypes","unchecked"})
 
 @WebServlet("/meli/categoria")
 public class MeliController extends HttpServlet{
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		RestClientConnector<List<Categoria>> connector = new RestClientConnector(
-				"https://api.mercadolibre.com/sites/MLA/categories", 
-				Categoria.class); 
 
-		List<Categoria> type = new ArrayList<>();
+		MeliCategoriaService servieRest = new MeliCategoriaServiceImpl(
+			"https://api.mercadolibre.com"
+		);
+
+		List<Categoria> categorias = servieRest.findCategorias();
+		Categoria categoria = servieRest.getCategoria("ABC");
+		ObjectMapper mapper = new ObjectMapper();
 		
-		List<Categoria> categorias = connector.execute();
+		String jsonList = mapper.writeValueAsString(categorias);
+//		String json = mapper.writeValueAsString(categoria);
 		
-		ObjectMapper mapper = new ObjectMapper(); 
-		String json = mapper.writeValueAsString(categorias);
+		System.out.println(jsonList);
+//		System.out.println(json);
 		
-		resp.getWriter().print(json);
+		resp.getWriter().print(jsonList);
 	}
 }

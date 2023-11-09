@@ -12,52 +12,82 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-public class RestClientConnector<T> {
+public abstract class RestClientConnector<T> {
 
 	private String url;
 	private Class<T> type;
-	
-	public RestClientConnector(String url, Class<T> type) {
+	private GenericType<List<T>> listType;
+
+	public RestClientConnector(String url, Class<T> type, GenericType<List<T>> listType) {
 		this.url = url;
 		this.type = type;
+		this.listType = listType;
 	}
 
-	public T execute() {
-		
-		Client client = ClientBuilder.newClient();
-		
-		WebTarget target = this.buildWebTarget(client);
-		
-		Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+	public T get() {
 
-		Response response = this.buildResponse(invocation); 
+		Invocation.Builder invoBuilder = commongLogic();
 		
-		if(response.getStatus() != Status.OK.getStatusCode()) {
-			throw new RuntimeException (response.getStatusInfo().getReasonPhrase());
-		}
+		Response response = invoBuilder.get();
 		
-		/*GenericType<List<Categoria>> listType = new GenericType<List<Categoria>>() {};		
-		List<Categoria> list = response.readEntity(listType);*/
 		T responseDto = this.buildFromResponse(response);
-		
+
 		return responseDto;
 	}
 
-	private T buildFromResponse(Response response) {
-		try {
-			return response.readEntity(this.type);
-		} catch (Exception e) {
-			/*Object obj = this.type.getConstructor().newInstance();
-			GenericType<List<Categoria>> listType = new GenericType<List<Categoria>>() {};		
-			List<Categoria> list = response.readEntity(listType);*/
-			e.printStackTrace();
+	public List<T> find() {
+
+		Invocation.Builder invoBuilder = commongLogic();
+		
+		Response response = invoBuilder.get(); 
+		
+		List<T> responseDto = this.buildListFromResponse(response);
+
+		return responseDto;
+	}
+	
+	public void create(T dto) {
+
+		Invocation.Builder invocation = commongLogic();
+		
+		Response response = this.buildPost(invocation, dto);
+
+		if (response.getStatus() != Status.OK.getStatusCode()) {
+			throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
 		}
-		return null;
+		
+		// T responseDto = this.buildFromResponse(response);
+
+		//return responseDto;
+	}
+	
+	protected abstract Response buildPost(Builder invocation, T dto);
+
+	private Invocation.Builder commongLogic() {
+		Client client = ClientBuilder.newClient();
+
+		WebTarget target = this.buildWebTarget(client);
+
+		Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+
+		/*Response response = this.buildResponse(invocation);
+
+		if (response.getStatus() != Status.OK.getStatusCode()) {
+			throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
+		}
+		return response;
+		*/
+		return invocation;
 	}
 
-	private Response buildResponse(Builder invocation) {
-		//asumo que las peticiones son GET
-		return invocation.get();
+
+	protected T buildFromResponse(Response response) {
+		// un objeto simple
+		return response.readEntity(this.type);
+	}
+
+	protected List<T> buildListFromResponse(Response response) {
+		return response.readEntity(this.listType);
 	}
 
 	private WebTarget buildWebTarget(Client client) {

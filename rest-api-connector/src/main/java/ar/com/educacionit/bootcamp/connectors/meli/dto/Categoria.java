@@ -1,5 +1,5 @@
 
-package ar.com.educacionit.bootcamp.controllers.jersey.meli.dto;
+package ar.com.educacionit.bootcamp.connectors.meli.dto;
 
 import jakarta.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
