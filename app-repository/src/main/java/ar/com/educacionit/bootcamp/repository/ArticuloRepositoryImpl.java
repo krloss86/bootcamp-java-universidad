@@ -19,12 +19,12 @@ public class ArticuloRepositoryImpl extends BaseCrud<Articulo> implements Articu
 	@Override
 	protected Articulo fromResultSetToEntity(ResultSet res) throws SQLException {
 		Long id = res.getLong(1);
-		String titulo = res.getString(2);
-		Long editorial_id = res.getLong(3);
-		Long isbn = res.getLong(4);
-		Integer paginas = res.getInt(5);
-		String idioma = res.getString(6);
-		LocalDate fechaPublicacion = res.getDate(7).toLocalDate();
+		Long editorial_id = res.getLong(2);
+		Long isbn = res.getLong(3);
+		Integer paginas = res.getInt(4);
+		String idioma = res.getString(5);
+//		String titulo = res.getString(2);
+		LocalDate fechaPublicacion = res.getDate(6).toLocalDate();
 		return new Articulo(id, editorial_id, isbn, paginas, idioma, fechaPublicacion);
 	}
 

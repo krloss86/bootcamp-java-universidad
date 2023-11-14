@@ -21,6 +21,7 @@ public class ArticuloController extends HttpServlet{
 	private ArticuloService service = (ArticuloService )ServiceLocator.getService(ArticuloService.class);
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
 		// /api/articulo/id
 		if(req.getParameter("id") == null || req.getParameter("id").isEmpty()) {
 			Collection<Articulo> articulos = service.buscarTodos();
