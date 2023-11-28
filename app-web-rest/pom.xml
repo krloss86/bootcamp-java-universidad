@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ar.com.educacionit</groupId>
+		<artifactId>app-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>app-web-rest</artifactId>
+	<packaging>war</packaging>
+	<name>app-web-rest</name>
+	<properties>
+		<jersey.version>3.1.3</jersey.version>
+		<!--    <war.mvn.plugin.version>3.4.0</war.mvn.plugin.version>-->
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.glassfish.jersey</groupId>
+				<artifactId>jersey-bom</artifactId>
+				<version>${jersey.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.inject</groupId>
+			<artifactId>jersey-hk2</artifactId>
+		</dependency>
+		<!-- uncomment this to get JSON support -->
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-binding</artifactId>
+		</dependency>
+		
+		<!-- librerias propias--> 		
+		<dependency>
+    		<groupId>ar.com.educacionit</groupId>
+    		<artifactId>app-service</artifactId>
+    		<version>0.0.1-SNAPSHOT</version>
+    	</dependency>
+	</dependencies>
+	<build>
+		<finalName>app-web-rest</finalName>
+	</build>
+</project>
