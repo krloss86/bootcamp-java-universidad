@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 
 import ar.com.educacionit.bootcamp.Articulo;
 
@@ -46,14 +47,27 @@ public class ArticuloRepositoryImpl extends BaseCrud<Articulo> implements Articu
 
 	@Override
 	protected String getUpdateSQL() {
-		// TODO Auto-generated method stub
-		return null;
+		return "editorial_id = ?, isbn = ?, nro_paginas = ?, idioma = ?, fecha_publicacion = ?";
 	}
 
 	@Override
 	protected void setUpdateSQL(Articulo entity, PreparedStatement pst) throws SQLException {
-		// TODO Auto-generated method stub
+		pst.setLong(1, entity.getEditorial());
+		pst.setLong(2, entity.getIsbn());
+		pst.setLong(3, entity.getNroPaginas());
+		pst.setString(4, entity.getIdioma());
+		Instant i = entity.getFechaPublicacion().atStartOfDay(ZoneId.systemDefault()).toInstant();
+		pst.setDate(5, new java.sql.Date(java.sql.Date.from(i).getTime()));
+	}
 
+	@Override
+	public Articulo getByISBN(Long isbn) {
+		String sql = "SELECT * FROM " +	 super.table + " WHERE isbn = " + isbn;
+		List<Articulo> list = super.findBySQL(sql);
+		if(!list.isEmpty()) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 }

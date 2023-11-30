@@ -1,6 +1,7 @@
 package org.app.service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import ar.com.educacionit.bootcamp.repository.BaseRepository;
 
@@ -18,7 +19,7 @@ public abstract class AbstractEntidadBaseService<T> implements EntidadBaseServic
 	}
 	
 	@Override
-	public T buscarPoId(Long id) {
+	public Optional<T> buscarPoId(Long id) {
 		return this.repository.getById(id);
 	}
 	

@@ -9,4 +9,8 @@ public class ArticuloServiceImpl extends AbstractEntidadBaseService<Articulo> im
 		super(new ArticuloRepositoryImpl());
 	}
 
+	@Override
+	public Articulo buscarPoISBN(Long isbn) {		
+		return ((ArticuloRepositoryImpl)this.repository).getByISBN(isbn);
+	}
 }

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import ar.com.educacionit.bootcamp.Entity;
 import ar.com.educacionit.bootcamp.db.AdministradorDeConexiones;
@@ -14,7 +15,7 @@ import ar.com.educacionit.bootcamp.db.AdministradorDeConexiones;
 public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 
 	private Class<T> type;
-	private String table;
+	protected String table;
 	
 	public BaseCrud(Class<T> type,String table) {
 		this.type = type;
@@ -66,7 +67,7 @@ public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 	}
 	
 	@Override
-	public T getById(Long id) {
+	public Optional<T> getById(Long id) {
 		String sql = "SELECT * FROM "+ this.table + " WHERE ID = " + id;
 		System.out.println(sql);
 		T entity = null;
@@ -92,7 +93,7 @@ public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 		}		
 		
 		//Api Reflection
-		return entity;
+		return Optional.ofNullable(entity);
 	}
 	
 	//cada RespositoryImpl debe implementar como extrae la data desde ResultSet
@@ -138,7 +139,7 @@ public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 			
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	public int getLast(String sql) {

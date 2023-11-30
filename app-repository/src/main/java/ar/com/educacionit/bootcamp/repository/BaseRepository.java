@@ -1,6 +1,7 @@
 package ar.com.educacionit.bootcamp.repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface BaseRepository<T> {
 	public void save(T entidad);
@@ -9,7 +10,7 @@ public interface BaseRepository<T> {
 
 	public void update(T entidad);
 
-	public T getById(Long id);
+	public Optional<T> getById(Long id);
 
 	public Collection<T> findAll();
 }
