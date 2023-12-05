@@ -3,6 +3,7 @@ package ar.com.educacionit.bootcamp.controllers;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.app.service.ArticuloService;
 import org.app.service.ServiceLocator;
@@ -28,8 +29,8 @@ public class ArticuloController extends HttpServlet{
 			resp.getWriter().print(articulos);
 		}else {
 			Long id = Long.parseLong(req.getParameter("id"));		
-			Articulo articulo = service.buscarPoId(id);		
-			resp.getWriter().print(articulo);
+			Optional<Articulo> articulo = service.buscarPoId(id);		
+			resp.getWriter().print(articulo.get());
 		}		
 	}
 	

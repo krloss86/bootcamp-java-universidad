@@ -116,7 +116,7 @@ public abstract class BaseCrud<T extends Entity> implements BaseRepository<T> {
 				entidad.setId(resKey.getLong(1));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}		
 	}
 	
